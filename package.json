@@ -1,4 +1,12 @@
 {
+  "name": "login-system",
+  "description": "Simple login system using node.js and Express",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Muhammad Raheel",
   "dependencies": {
     "express": "^5.2.1",
     "nodemon": "^3.1.11"
