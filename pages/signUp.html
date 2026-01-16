@@ -14,17 +14,17 @@
         <h2>Create Account</h2>
 
         <form method="POST" action="/signup">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Sign Up</button>
+            <input type="text" name="username" placeholder="Username" required >
+            <input type="email" name="email" placeholder="Email" required  id="email">
+            <input type="password" name="password" placeholder="Password" required id="password">
+            <button type="submit" id ="submit">Sign Up</button>
         </form>
 
         <p>Already have an account?
-            <a href="/login">Login</a>
+            <a href="/">Login</a>
         </p>
     </div>
-
+    <script src="/js/signUp.js"></script>
 </body>
 
 </html>
