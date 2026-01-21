@@ -1,0 +1,90 @@
+body {
+    background: #f4f6f8;
+}
+
+/* SUCCESS CONTAINER */
+.success {
+    background: #ffffff;
+    text-align: center;
+    padding: 45px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 420px;
+    width: 100%;
+}
+
+/* CHECK ICON */
+.icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #ffffff;
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TEXT */
+.success h1 {
+    font-size: 24px;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.success p {
+    font-size: 15px;
+    color: #6b7280;
+    margin-bottom: 28px;
+}
+
+/* BUTTON GROUP */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* PRIMARY BUTTON */
+.primary {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.primary:hover {
+    background: #4338ca;
+}
+
+/* SECONDARY BUTTON */
+.secondary {
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: transparent;
+}
+
+.secondary:hover {
+    background: #f3f4f6;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .success {
+        padding: 30px;
+    }
+
+    .success h1 {
+        font-size: 22px;
+    }
+}
