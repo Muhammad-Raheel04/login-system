@@ -1,7 +1,20 @@
-.error {
-    border-left: 5px solid red;
+/* error.css */
+.container.error {
+    border-left: 5px solid #e74c3c;
+    background-color: #fff;
+    text-align: center;
 }
 
-.error p {
-    color: red;
+.container.error h2 {
+    color: #e74c3c;
+}
+
+.container.error p {
+    margin-top: 10px;
+}
+
+.container.error a {
+    display: inline-block;
+    margin-top: 15px;
+    color: #007bff;
 }
