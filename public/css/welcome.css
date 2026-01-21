@@ -1,0 +1,44 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding:20px;
+}
+
+.container {
+    background: #fff;
+    padding: 40px 60px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    font-size: 28px;
+}
+
+#quote {
+    margin-top: 20px;
+    font-style: italic;
+    color: #555;
+    font-size: 18px;
+}
+
+#newQuoteBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#newQuoteBtn:hover {
+    background: #0056b3;
+}
