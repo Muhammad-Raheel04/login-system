@@ -1,6 +1,2 @@
-this login system is for understanding basics
-of different methods in express.js like
-app.get()
-app.post()
-app.redirect()
-app.send()
+A simple login system that allows users to register, log in, and manage sessions.
+Currently under development core login functionality is being implemented.
