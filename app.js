@@ -26,7 +26,7 @@ app.set('views',path.join(__dirname,'pages'));
 
 app.use('/',authRoutes);
 
-const PORT = process.env.PORT || 3200;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`visit ${PORT}`);
 })
