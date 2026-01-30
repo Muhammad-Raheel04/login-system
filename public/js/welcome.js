@@ -11,19 +11,7 @@ function showRandomQuote() {
     document.getElementById('quote').innerText = quote;
 }
 
-async function getUsername() {
-    try {
-        const res = await fetch('/api/user'); // call backend API
-        const data = await res.json();
-        document.getElementById('username').innerText = data.username || "Guest";
-    } catch (err) {
-        console.error(err);
-        document.getElementById('username').innerText = "Guest";
-    }
-}
-
 window.addEventListener('DOMContentLoaded', () => {
-    getUsername();       // fetch username dynamically
     showRandomQuote();   // show initial quote
 
     document.getElementById('newQuoteBtn').addEventListener('click', showRandomQuote);
