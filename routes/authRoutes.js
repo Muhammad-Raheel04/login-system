@@ -20,66 +20,70 @@ router.get('/signup', (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    try{
-        const db=await connectDB();
-        const users=db.collection('users');
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
 
-        const user =await users.findOne({email,password});
-        
-        if(!user){
+        const user = await users.findOne({ email, password });
+
+        if (!user) {
             return res.redirect('/err');
         }
 
-        req.session.user={
-            id:user.__dirname
+        req.session.user = {
+            id: user._id.toString()
         }
 
-        res.redirect('/welcome');
-    }catch(err){
+        req.session.save(() => {
+            res.redirect('/welcome');
+        })
+    } catch (err) {
         console.error(err);
         res.redirect('/err');
     }
 });
 
-router.post('/signup',async (req, res) => {
+router.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
 
-    try{
-        const db=await connectDB();
-        const users=db.collection('users');
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
 
-        const exists=await users.findOne({email});
+        const exists = await users.findOne({ email });
 
-        if(exists){
+        if (exists) {
             return res.redirect('/');
         }
 
-        const result =await users.insertOne({
+        const result = await users.insertOne({
             username,
             email,
             password
         })
 
-        req.session.user={
-            id:result.insertedId
+        req.session.user = {
+            id: result.insertedId.toString()
         };
-        res.redirect('/welcome');
-    }catch(err){
+        req.session.save(() => {
+            res.redirect('/welcome');
+        })
+    } catch (err) {
         console.error(err);
         res.redirect('/err');
     }
 })
 router.get('/welcome', authMiddleware, async (req, res) => {
-    try{
-        const db=await connectDB();
-        const users=db.collection('users');
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
 
-        const user =await users.findOne({
-            _id:new ObjectId(req.session.user.id)
+        const user = await users.findOne({
+            _id: new ObjectId(req.session.user.id)
         })
 
-        res.render('welcome',{username:user?.username || 'Guest'});
-    }catch(err){
+        res.render('welcome', { username: user?.username || 'Guest' });
+    } catch (err) {
         console.error(err);
         res.redirect('/err');
     }
