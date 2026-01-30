@@ -14,6 +14,9 @@ router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../pages/login.html'));
 });
 
+router.get('/err',(req,res)=>{
+    res.sendFile(path.join(__dirname, '../pages/err.html'));
+})
 router.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '../pages/signUp.html'));
 })
