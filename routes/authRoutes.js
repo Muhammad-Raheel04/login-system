@@ -1,12 +1,11 @@
 const express = require('express');
 const path = require('path');
-const router = express.Router();
-const fs = require('fs');
-const publicUsersPath = path.join(__dirname, '../public/js/publicUsers.json');
+const { ObjectId } = require('mongodb');
 
-const { getUsers, saveUsers } = require('../utils/filehandler');
+const connectDB = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
-const { NetworkResources } = require('inspector/promises');
+
+const router = express.Router();
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../pages/login.html'));
@@ -18,93 +17,73 @@ router.get('/login', (req, res) => {
 router.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '../pages/signUp.html'));
 })
-
-router.get('/success', authMiddleware, (req, res) => {
-    res.sendFile(path.join(__dirname, '../pages/success.html'));
-})
-
-router.get('/welcome', authMiddleware, (req, res) => {
-    res.sendFile(path.join(__dirname, '../pages/welcome.html'));
-})
-
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    const users = getUsers();
-    const user = users.find(u => u.email === email && u.password === password)
+    try{
+        const db=await connectDB();
+        const users=db.collection('users');
 
-    if (!user) {
-        return res.redirect('/err');
+        const user =await users.findOne({email,password});
+        
+        if(!user){
+            return res.redirect('/err');
+        }
+
+        req.session.user={
+            id:user.__dirname
+        }
+
+        res.redirect('/welcome');
+    }catch(err){
+        console.error(err);
+        res.redirect('/err');
     }
-
-    req.session.user = {
-        id: user.id,
-        email: user.email
-    }
-
-    return res.redirect('/welcome');
 });
 
-router.post('/signup', (req, res) => {
+router.post('/signup',async (req, res) => {
     const { username, email, password } = req.body;
 
-    const users = getUsers();
-    const exists = users.find(u => u.email === email);
+    try{
+        const db=await connectDB();
+        const users=db.collection('users');
 
-    if (exists) {
-        return res.redirect('/');
-    }
+        const exists=await users.findOne({email});
 
-    const newUser = {
-        id: users.length + 1,
-        username,
-        email,
-        password
-    }
-    users.push(newUser);
-
-    saveUsers(users);
-
-    const folderPath = path.dirname(publicUsersPath);
-    if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath, { recursive: true });
-    }
-
-
-    let publicUsers = [];
-    if (fs.existsSync(publicUsersPath)) {
-        const data = fs.readFileSync(publicUsersPath, 'utf-8').trim();
-        if (data) {
-            try {
-                publicUsers = JSON.parse(data);
-            } catch (err) {
-                console.error("Error parsing publicUsers.json:", err);
-                publicUsers = [];
-            }
+        if(exists){
+            return res.redirect('/');
         }
+
+        const result =await users.insertOne({
+            username,
+            email,
+            password
+        })
+
+        req.session.user={
+            id:result.insertedId
+        };
+        res.redirect('/welcome');
+    }catch(err){
+        console.error(err);
+        res.redirect('/err');
     }
-
-    publicUsers.push({
-        id: newUser.id,
-        username: newUser.username
-    })
-
-    fs.writeFileSync(publicUsersPath, JSON.stringify(publicUsers, null, 2));
-
-    req.session.user = { id: newUser.id, email: newUser.email };
-    return res.redirect('/success');
 })
+router.get('/welcome', authMiddleware, async (req, res) => {
+    try{
+        const db=await connectDB();
+        const users=db.collection('users');
 
-router.get('/api/user', authMiddleware, (req, res) => {
-    const userId = req.session.user.id;
-    let publicUsers = [];
-    if (fs.existsSync(publicUsersPath)) {
-        const data = fs.readFileSync(publicUsersPath, 'utf-8').trim();
-        if (data) publicUsers = JSON.parse(data);
+        const user =await users.findOne({
+            _id:new ObjectId(req.session.user.id)
+        })
+
+        res.render('welcome',{username:user?.username || 'Guest'});
+    }catch(err){
+        console.error(err);
+        res.redirect('/err');
     }
-    const user = publicUsers.find(u => u.id === userId);
-    res.json({ username: user ? user.username : "Guest" });
-});
+})
 
 router.get('/logout', (req, res) => {
     req.session.destroy(() => {
