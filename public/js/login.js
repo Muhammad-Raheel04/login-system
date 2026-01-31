@@ -1,5 +1,4 @@
-// public/js/login.js
-
+const loginBtn = document.getElementById('loginBtn');
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form');
 
@@ -16,14 +15,21 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault(); // prevent default form submission
 
+        const setLoading = (isLoading) => {
+            loginBtn.disabled = isLoading;
+            loginBtn.innerText = isLoading ? "Trying to log you in..." : "Login";
+
+        }
+
         // Clear previous error
         errorMsg.textContent = '';
-
+        setLoading(true);
         const email = form.email.value.trim();
         const password = form.password.value.trim();
 
         if (!email || !password) {
             errorMsg.textContent = "Please enter both email and password.";
+            setLoading(false);
             return;
         }
 
@@ -47,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error("Login error:", err);
             errorMsg.textContent = "Something went wrong. Please try again.";
+            loginBtn.innerText = "Login";
+            loginBtn.disabled = false;
+        }finally{
+            setLoading(false);
         }
     });
 });
