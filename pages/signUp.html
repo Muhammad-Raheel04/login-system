@@ -13,8 +13,8 @@
     <div class="container">
         <h2>Create Account</h2>
 
-        <form method="POST" action="/signup">
-            <input type="text" name="username" placeholder="Username" required >
+        <form id="signupForm" method="POST" action="/signup">
+            <input type="text" name="username" placeholder="Username" required id="username" >
             <input type="email" name="email" placeholder="Email" required  id="email">
             <input type="password" name="password" placeholder="Password" required id="password">
             <button type="submit" id ="submit">Sign Up</button>
@@ -24,7 +24,7 @@
             <a href="/">Login</a>
         </p>
     </div>
-    <script src="/js/signUp.js"></script>
+    <script src="/js/signUp.js" defer></script>
 </body>
 
 </html>
