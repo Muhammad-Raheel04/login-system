@@ -7,9 +7,13 @@ const quotes = [
 ];
 
 window.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn=document.getElementById('logoutBtn');
     const newQuoteBtn = document.getElementById('newQuoteBtn');
 
 
+    logoutBtn.addEventListener('click',()=>{
+        window.location.href='/logout';
+    })
     newQuoteBtn.addEventListener('click', showRandomQuote);
 
     function showRandomQuote() {
