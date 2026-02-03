@@ -6,13 +6,21 @@ const quotes = [
     "Before software can be reusable it first has to be usable."
 ];
 
-function showRandomQuote() {
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById('quote').innerText = quote;
-}
-
 window.addEventListener('DOMContentLoaded', () => {
-    showRandomQuote();   // show initial quote
+    const newQuoteBtn = document.getElementById('newQuoteBtn');
 
-    document.getElementById('newQuoteBtn').addEventListener('click', showRandomQuote);
+
+    newQuoteBtn.addEventListener('click', showRandomQuote);
+
+    function showRandomQuote() {
+        newQuoteBtn.innerText = "Loading your quote...";
+        newQuoteBtn.disabled = true;
+        setTimeout(() => {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote').innerText = quote;
+            newQuoteBtn.innerText = "New Quote";
+            newQuoteBtn.disabled = false;
+        }, 300);
+    }
+    showRandomQuote();
 });
