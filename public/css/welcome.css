@@ -43,7 +43,8 @@ h1 {
 }
 
 #newQuoteBtn,
-#logoutBtn {
+#logoutBtn,
+#updatePassword{
     margin-top: 30px;
     padding: 18px 35px; /* Larger button */
     background: #4f46e5;
@@ -59,7 +60,8 @@ h1 {
 }
 
 #newQuoteBtn:hover,
-#logoutBtn:hover {
+#logoutBtn:hover,
+#updatePassword:hover {
     background: #4338ca;
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
@@ -85,7 +87,8 @@ h1 {
     }
     
     #newQuoteBtn,
-    #logoutBtn {
+    #logoutBtn,
+    #updatePassword {
         padding: 16px 30px;
         font-size: 1rem;
     }
@@ -117,8 +120,9 @@ h1 {
         border-left: 3px solid #4f46e5;
     }
     
-    #newQuoteBtn
-    #logoutBtn {
+    #newQuoteBtn,
+    #logoutBtn,
+    #updatePassword {
         padding: 16px;
         font-size: 1rem;
         max-width: 100%;
@@ -142,7 +146,8 @@ h1 {
     }
     
     #newQuoteBtn,
-    #logoutBtn {
+    #logoutBtn,
+    #updatePassword {
         padding: 14px;
         font-size: 0.95rem;
     }
