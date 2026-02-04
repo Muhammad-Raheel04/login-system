@@ -7,12 +7,15 @@ const quotes = [
 ];
 
 window.addEventListener('DOMContentLoaded', () => {
-    const logoutBtn=document.getElementById('logoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
     const newQuoteBtn = document.getElementById('newQuoteBtn');
+    const updatePassword = document.getElementById('updatePassword');
 
-
-    logoutBtn.addEventListener('click',()=>{
-        window.location.href='/logout';
+    logoutBtn.addEventListener('click', () => {
+        window.location.href = '/logout';
+    })
+    updatePassword.addEventListener('click',()=>{
+        windown.location.href='/update-password';
     })
     newQuoteBtn.addEventListener('click', showRandomQuote);
 
