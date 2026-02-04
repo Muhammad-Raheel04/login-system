@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
         const user = await users.findOne({ email, password });
 
         if (!user) {
-            return res.redirect('/err');
+            return res.status(401).redirect('/err');
         }
 
         req.session.user = {
@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
         })
     } catch (err) {
         console.error(err);
-        res.redirect('/err');
+        res.status(500).redirect('/err');
     }
 });
 
@@ -56,7 +56,7 @@ router.post('/signup', async (req, res) => {
         const exists = await users.findOne({ email });
 
         if (exists) {
-            return res.redirect('/');
+            return res.status(409).redirect('/');
         }
 
         const result = await users.insertOne({
@@ -69,11 +69,11 @@ router.post('/signup', async (req, res) => {
             id: result.insertedId.toString()
         };
         req.session.save(() => {
-            res.redirect('/welcome');
+            res.status(302).redirect('/welcome');
         })
     } catch (err) {
         console.error(err);
-        res.redirect('/err');
+        res.status(500).redirect('/err');
     }
 })
 router.get('/welcome', authMiddleware, async (req, res) => {
@@ -85,10 +85,10 @@ router.get('/welcome', authMiddleware, async (req, res) => {
             _id: new ObjectId(req.session.user.id)
         })
 
-        res.render('welcome', { username: user?.username || 'Guest' });
+        res.status(200).render('welcome', { username: user?.username || 'Guest' });
     } catch (err) {
         console.error(err);
-        res.redirect('/err');
+        res.status(302).redirect('/err');
     }
 })
 
