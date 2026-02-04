@@ -88,7 +88,7 @@ router.get('/welcome', authMiddleware, async (req, res) => {
         res.status(200).render('welcome', { username: user?.username || 'Guest' });
     } catch (err) {
         console.error(err);
-        res.status(302).redirect('/err');
+        res.status(500).redirect('/err');
     }
 })
 
@@ -97,6 +97,21 @@ router.get('/logout', (req, res) => {
         res.redirect('/');
     });
 });
+router.get('/update-password',authMiddleware,async(req,res)=>{
+    try{
+        const db=await connectDB();
+        const users=db.collection('users');
+
+        const user=await users.findOne({
+            _id:new ObjectId(req.session.user.id)
+        })
+        res.render('update-password',{email:user.email});
+
+    }catch(err){
+        console.log(err);
+        res.status(500).redirect('/err');
+    }
+})
 router.use((req,res)=>{
     res.status(404).sendFile(path.join(__dirname,'../pages','404.html'));
 })
