@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { ObjectId } = require('mongodb');
+const bcrypt = require('bcrypt');
 
 const connectDB = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
@@ -112,6 +113,21 @@ router.get('/update-password',authMiddleware,async(req,res)=>{
         res.status(500).redirect('/err');
     }
 })
+router.post('/update-password', authMiddleware, async (req, res) => {
+  const { newPassword } = req.body;
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  const db = await connectDB();
+  const users = db.collection('users');
+
+  await users.updateOne(
+    { _id: new ObjectId(req.session.user.id) },
+    { $set: { password: hashedPassword } }
+  );
+
+  res.redirect('/welcome');
+});
 router.use((req,res)=>{
     res.status(404).sendFile(path.join(__dirname,'../pages','404.html'));
 })
