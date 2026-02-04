@@ -97,5 +97,7 @@ router.get('/logout', (req, res) => {
         res.redirect('/');
     });
 });
-
+router.use((req,res)=>{
+    res.status(404).sendFile(path.join(__dirname,'../pages','404.html'));
+})
 module.exports = router;
