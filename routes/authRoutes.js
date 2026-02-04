@@ -28,12 +28,17 @@ router.post('/login', async (req, res) => {
         const db = await connectDB();
         const users = db.collection('users');
 
-        const user = await users.findOne({ email, password });
+        const user = await users.findOne({ email});
 
         if (!user) {
             return res.status(401).redirect('/err');
         }
 
+        const isMatch=await bcrypt.compare(password,user.password);
+
+        if(!isMatch){
+            return res.status(401).redirect('/err');
+        }
         req.session.user = {
             id: user._id.toString()
         }
@@ -60,10 +65,11 @@ router.post('/signup', async (req, res) => {
             return res.status(409).redirect('/');
         }
 
+        const hashedPassword=await bcrypt.hash(password,10);
         const result = await users.insertOne({
             username,
             email,
-            password
+            password:hashedPassword
         })
 
         req.session.user = {
