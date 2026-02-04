@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/logout';
     })
     updatePassword.addEventListener('click',()=>{
-        windown.location.href='/update-password';
+        window.location.href='/update-password';
     })
     newQuoteBtn.addEventListener('click', showRandomQuote);
 
