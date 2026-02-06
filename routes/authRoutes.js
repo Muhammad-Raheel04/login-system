@@ -9,26 +9,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.get('/', async(req, res) => {
-    try{
-        const db=await connectDB();
-        const users=db.collection('users');
-        const allUsers=await users.find({}).toArray();
-
-        for(const user of allUsers){
-            if(!user.password.startsWith('$2')){
-                const hashed=await bcrypt.hash(user.password,10);
-                await users.updateOne(
-                    {_id:user._id},
-                    {$set:{password:hashed}}
-                )
-                console.log(`hashed password for ${user.email}`)
-            }
-        }
-        console.log("All plain-text passwords hashed successfully.")
-    }catch(err){
-        console.error('Error hashing passwords:',err);
-        res.status(500).redirect('/err');
-    }
     res.sendFile(path.join(__dirname, '../pages/login.html'));
 });
 router.get('/login', (req, res) => {
