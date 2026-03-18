@@ -73,92 +73,109 @@ export const verify = async (req, res) => {
                 })
             }
             return res.status(401).json({
-                success:false,
-                message:"Invalid token"
+                success: false,
+                message: "Invalid token"
             })
         }
 
-        const user=await User.findById(decoded.id);
+        const user = await User.findById(decoded.id);
 
-        if(!user){
+        if (!user) {
             return res.status(404).json({
-                success:false,
-                message:"User not found",
-            })
-        }
-        
-        if(user.isVerified){
-            return res.status(400).json({
-                success:false,
-                message:"User already verified"
+                success: false,
+                message: "User not found",
             })
         }
 
-        user.token=null;
-        user.isVerified=true;
+        if (user.isVerified) {
+            return res.status(400).json({
+                success: false,
+                message: "User already verified"
+            })
+        }
+
+        user.token = null;
+        user.isVerified = true;
         await user.save();
 
         return res.status(200).json({
-            success:false,
-            message:"Email verified successfully"
+            success: false,
+            message: "Email verified successfully"
         })
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:error.message,
+            success: false,
+            message: error.message,
         })
     }
 }
-export const login=async(req,res)=>{
-    try{
-        const {email,password}=req.body;
-        if(!email || !password){
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
             return res.status(401).json({
-                success:false,
-                message:"All fields are required",
+                success: false,
+                message: "All fields are required",
             })
         }
-        const existingUser=await User.findOne({email});
-        if(!existingUser){
+        const existingUser = await User.findOne({ email });
+        if (!existingUser) {
             return res.status(401).json({
-                success:false,
-                message:"User doesn't exist",
+                success: false,
+                message: "User doesn't exist",
             })
         }
-        const isPassword=await bcrypt.compare(password,existingUser.password);
-        if(!isPassword){
+        const isPassword = await bcrypt.compare(password, existingUser.password);
+        if (!isPassword) {
             return res.status(400).json({
-                success:false,
-                message:"Invalid Credentials"
+                success: false,
+                message: "Invalid Credentials"
             })
         }
-        if(existingUser.isVerified===false){
+        if (existingUser.isVerified === false) {
             return res.status(400).json({
-                success:false,
-                message:"Verify your account then login"
+                success: false,
+                message: "Verify your account then login"
             })
         }
 
-        const accessToken=jwt.sign({id:existingUser._id},process.env.SECRET_KEY,{expiresIn:'100y'});
+        const accessToken = jwt.sign({ id: existingUser._id }, process.env.SECRET_KEY, { expiresIn: '100y' });
 
-        existingUser.isLoggedIn=true;
+        existingUser.isLoggedIn = true;
         await existingUser.save();
 
-        const existingSession=await Session.findOne({userId:existingUser._id});
-        if(existingSession){
-            await Session.deleteOne({userId:existingUser._id});
+        const existingSession = await Session.findOne({ userId: existingUser._id });
+        if (existingSession) {
+            await Session.deleteOne({ userId: existingUser._id });
         }
 
-        await Session.create({userId:existingUser._id});
-      
+        await Session.create({ userId: existingUser._id });
+
         return res.status(200).json({
-            success:true,
-            message:`Welcome back ${existingUser._id}`,
-            user:{
-                name:`${existingUser.firstName} ${existingUser.lastName}`,
-                role:existingUser.role
+            success: true,
+            message: `Welcome back ${existingUser._id}`,
+            user: {
+                name: `${existingUser.firstName} ${existingUser.lastName}`,
+                role: existingUser.role
             },
             accessToken
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+export const logout=async(req,res)=>{
+    try{
+        const userId=req.id;
+        await Session.deleteMany({userId:userId});
+        await User.findByIdAndUpdate(userId,{isLoggedIn:false});
+
+        return res.status(200).json({
+            success:true,
+            message:"Logged out successfully"
         })
     }catch(error){
         return res.status(500).json({
