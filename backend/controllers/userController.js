@@ -158,7 +158,6 @@ export const login = async (req, res) => {
                 name: `${existingUser.firstName} ${existingUser.lastName}`,
                 role: existingUser.role
             },
-            accessToken
         })
     } catch (error) {
         return res.status(500).json({
